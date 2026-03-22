@@ -26,10 +26,6 @@
 
 为主，适合在复习阶段进行系统回顾，也适合面试前快速翻看。
 
-<p align="center">
-  <img src="./img/licensed-image.jpg" alt="决策树示意图" width="680" />
-</p>
-
 ## 内容导航
 
 | 模块 | 内容简介 |

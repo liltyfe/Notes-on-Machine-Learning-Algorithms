@@ -1,23 +1,26 @@
-# <span id="toc-001"></span>Fisher
+# Fisher
+
 
 <!-- TOC START -->
 ## 目录
 
-- <a href="#toc-001">Fisher</a>
-  - <a href="#toc-002">Firsher 讲解</a>
-    - <a href="#toc-003">🧮 核心绝密配方：二分类 Fisher 的“捷径公式”</a>
-    - <a href="#toc-004">📝 极简实战：手工计算 Fisher 矢量</a>
-- <a href="#toc-005">后记</a>
-  - <a href="#toc-006">如何理解向量的平方</a>
-    - <a href="#toc-007">第一种平方：内积 (Inner Product) —— 算“长度”</a>
-    - <a href="#toc-008">第二种平方：外积 (Outer Product) —— 算“散度/面积” 🌟（本题主角）</a>
-    - <a href="#toc-009">举例说明</a>
+- <a href="#toc-0001">Firsher 讲解</a>
+  - <a href="#toc-0002">🧮 核心绝密配方：二分类 Fisher 的“捷径公式”</a>
+  - <a href="#toc-0003">📝 极简实战：手工计算 Fisher 矢量</a>
+    - <a href="#toc-0004">第一步：找中心（算均值 $\mu$）</a>
+    - <a href="#toc-0005">第二步：算每个类别的内部散度（$S_1$ 和 $S_2$）</a>
+    - <a href="#toc-0006">第三步：求总类内散度 $S_w$ 及其逆矩阵 $S_w^{-1}$</a>
+    - <a href="#toc-0007">第四步：见证奇迹的时刻（算 $w$）</a>
+- <a href="#toc-0008">如何理解向量的平方</a>
+  - <a href="#toc-0009">第一种平方：内积 (Inner Product) —— 算“长度”</a>
+  - <a href="#toc-0010">第二种平方：外积 (Outer Product) —— 算“散度/面积” 🌟（本题主角）</a>
+  - <a href="#toc-0011">举例说明</a>
 
 <!-- TOC END -->
 
-## <a id="toc-002"></a>Firsher 讲解
+## <a id="toc-0001"></a>Firsher 讲解
 
-### <a id="toc-003"></a>🧮 核心绝密配方：二分类 Fisher 的“捷径公式”
+### <a id="toc-0002"></a>🧮 核心绝密配方：二分类 Fisher 的“捷径公式”
 
 在二分类问题中，我们要找的最佳投影方向 $w$，可以直接通过下面这个公式一步算出来：
 $$w = S_w^{-1} (\mu_1 - \mu_2)$$
@@ -32,7 +35,7 @@ $$w = S_w^{-1} (\mu_1 - \mu_2)$$
 
 ---
 
-### <a id="toc-004"></a> 📝 极简实战：手工计算 Fisher 矢量
+### <a id="toc-0003"></a>📝 极简实战：手工计算 Fisher 矢量
 
 为了不被复杂的分数和小数恶心到，我为你精心设计了一组“上下左右完全对称”的极简二维数据。
 
@@ -41,7 +44,7 @@ $$w = S_w^{-1} (\mu_1 - \mu_2)$$
 
 现在，我们严格按照公式，一步步把最优方向 $w$ 算出来。
 
-#### 第一步：找中心（算均值 $\mu$）
+#### <a id="toc-0004"></a>第一步：找中心（算均值 $\mu$）
 把每一类的 $x$ 坐标和 $y$ 坐标分别加起来求平均：
 * **红豆的中心 $\mu_1$**：$x = \frac{0+1+2+1}{4} = 1$，$y = \frac{1+0+1+2}{4} = 1$。所以 $\mu_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$
 * **蓝豆的中心 $\mu_2$**：$x = \frac{4+5+6+5}{4} = 5$，$y = \frac{5+4+5+6}{4} = 5$。所以 $\mu_2 = \begin{bmatrix} 5 \\ 5 \end{bmatrix}$
@@ -49,7 +52,7 @@ $$w = S_w^{-1} (\mu_1 - \mu_2)$$
 算出中心点连线向量：
 $$\mu_1 - \mu_2 = \begin{bmatrix} 1 \\ 1 \end{bmatrix} - \begin{bmatrix} 5 \\ 5 \end{bmatrix} = \begin{bmatrix} -4 \\ -4 \end{bmatrix}$$
 
-#### <span id="step2"></span>第二步：算每个类别的内部散度（$S_1$ 和 $S_2$）
+#### <a id="toc-0005"></a>第二步：算每个类别的内部散度（$S_1$ 和 $S_2$）
 散度其实就是没除以样本数的“方差”。我们要算每个点偏离自己中心的距离平方。
 **看红豆（中心是 1,1）**：
 * $(0, 1)$ 偏离中心 $\rightarrow \begin{bmatrix} -1 \\ 0 \end{bmatrix}$，平方矩阵是 $\begin{bmatrix} -1 \\ 0 \end{bmatrix} \begin{bmatrix} -1 & 0 \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$
@@ -63,13 +66,13 @@ $$S_2 = \begin{bmatrix} 2 & 0 \\ 0 & 2 \end{bmatrix}$$
 
 > [如何理解向量的平方](#如何理解向量的平方)
 
-#### 第三步：求总类内散度 $S_w$ 及其逆矩阵 $S_w^{-1}$
+#### <a id="toc-0006"></a>第三步：求总类内散度 $S_w$ 及其逆矩阵 $S_w^{-1}$
 把两家的散度加起来：
 $$S_w = S_1 + S_2 = \begin{bmatrix} 2 & 0 \\ 0 & 2 \end{bmatrix} + \begin{bmatrix} 2 & 0 \\ 0 & 2 \end{bmatrix} = \begin{bmatrix} 4 & 0 \\ 0 & 4 \end{bmatrix}$$
 求逆矩阵（对角线矩阵的逆，直接把对角线数字变成倒数）：
 $$S_w^{-1} = \begin{bmatrix} 1/4 & 0 \\ 0 & 1/4 \end{bmatrix}$$
 
-#### 第四步：见证奇迹的时刻（算 $w$）
+#### <a id="toc-0007"></a>第四步：见证奇迹的时刻（算 $w$）
 套入我们的终极捷径公式：
 $$w = S_w^{-1} (\mu_1 - \mu_2)$$
 $$w = \begin{bmatrix} 1/4 & 0 \\ 0 & 1/4 \end{bmatrix} \begin{bmatrix} -4 \\ -4 \end{bmatrix} = \begin{bmatrix} -1 \\ -1 \end{bmatrix}$$
@@ -80,14 +83,14 @@ $$w = \begin{bmatrix} 1/4 & 0 \\ 0 & 1/4 \end{bmatrix} \begin{bmatrix} -4 \\ -4 
 
 ---
 
-# <a id="toc-005"></a>后记
+# 后记
 
-## <a id="toc-006"></a>如何理解向量的平方
+## <a id="toc-0008"></a>如何理解向量的平方
 
 在普通初中代数里，一个数字的平方就是 $x \times x = x^2$。
 但在**线性代数（向量的世界）**里，一个向量有方向、有维度，所以向量的“平方”有**两种完全不同的乘法**，代表着两种完全不同的物理意义！
 
-### <a id="toc-007"></a>第一种平方：内积 (Inner Product) —— 算“长度”
+### <a id="toc-0009"></a>第一种平方：内积 (Inner Product) —— 算“长度”
 **【算式】**：行向量 $\times$ 列向量 ($v^T v$)
 $$\begin{bmatrix} x & y \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = x \cdot x + y \cdot y = x^2 + y^2$$
 
@@ -95,7 +98,7 @@ $$\begin{bmatrix} x & y \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = x \
 
 ---
 
-### <a id="toc-008"></a>第二种平方：外积 (Outer Product) —— 算“散度/面积” 🌟（本题主角）
+### <a id="toc-0010"></a>第二种平方：外积 (Outer Product) —— 算“散度/面积” 🌟（本题主角）
 **【算式】**：列向量 $\times$ 行向量 ($v v^T$)
 $$\begin{bmatrix} x \\ y \end{bmatrix} \begin{bmatrix} x & y \end{bmatrix} = \begin{bmatrix} x \cdot x & x \cdot y \\ y \cdot x & y \cdot y \end{bmatrix} = \begin{bmatrix} x^2 & xy \\ xy & y^2 \end{bmatrix}$$
 
@@ -107,7 +110,7 @@ $$\begin{bmatrix} x \\ y \end{bmatrix} \begin{bmatrix} x & y \end{bmatrix} = \be
 
 ---
 
-### <a id="toc-009"></a>举例说明
+### <a id="toc-0011"></a>举例说明
 
 在 [第二步：算每个类别的内部散度（$S_1$ 和 $S_2$）](#step2) 里，红豆的中心是 $(1,1)$，其中一个数据点是 $(0,1)$。
 * 它偏离中心的位置是：X轴偏了 $-1$，Y轴偏了 $0$。
@@ -132,4 +135,3 @@ $$\begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$$
 
 **一句话总结：**
 向量的**内积 ($v^T v$)** 把数据压成一个点（算长度）；而向量的**外积 ($v v^T$)** 把数据撑开成一个面（算散布矩阵）。算协方差/散度，永远用外积！
-
